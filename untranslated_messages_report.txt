@@ -1,0 +1,28 @@
+{
+  "en": [
+    "posNumberTitle",
+    "posNumberContent",
+    "yesGo",
+    "userNotFound",
+    "enterValidPhoneOrId",
+    "amountInBillions",
+    "amountInMillions",
+    "confirmTransferTitle",
+    "confirmIdentityDesc",
+    "amountLabel",
+    "toLabel",
+    "walletIdLabel",
+    "mobileLabel",
+    "successTransferTitle",
+    "successTransferBody",
+    "receiptTitle",
+    "saifiPaySystem",
+    "recipientLabel",
+    "referenceNumberLabel",
+    "operationSuccess",
+    "sendViaWhatsapp",
+    "noPhoneInContact",
+    "qrOpenError",
+    "insufficientBalanceWarning"
+  ]
+}
