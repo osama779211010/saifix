@@ -32,7 +32,6 @@ dependencies:
 
   url_launcher: any
   easy_localization: any
-  mobile_scanner: any
   flutter_localizations:
     sdk: flutter
   firebase_core: any
