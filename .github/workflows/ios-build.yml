@@ -2,33 +2,42 @@ name: iOS IPA Build
 
 on:
   push:
-    branches: [ main, master ] 
+    branches:
+      - main
+      - master
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: macos-latest 
+    runs-on: macos-latest
+    timeout-minutes: 90
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'zulu'
-        java-version: '17'
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: "17"
 
-    - name: Set up Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.29.3' 
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.29.3"
+          channel: stable
+          architecture: arm64
+          cache: true
 
-    - name: Install dependencies
-      run: flutter pub get
+      - name: Install dependencies
+        run: flutter pub get
 
-    - name: Install iOS pods with debug
-      run: |
+      - name: Install iOS pods with debug
+        shell: bash
+        run: |
           set -e
+
           echo "=== Podfile ==="
           cat ios/Podfile
 
@@ -43,19 +52,39 @@ jobs:
           pod install --repo-update --verbose
           cd ..
 
-    - name: Build iOS App No Sign
-      run: flutter build ios --release --no-codesign -v
+      - name: Build iOS App No Sign
+        shell: bash
+        run: |
+          set +e
 
-    - name: Create IPA Directory
-      run: |
-        mkdir -p build/ios/iphoneos
-        cd build/ios/iphoneos
-        mkdir Payload
-        ln -s ../../../build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app Payload/Runner.app
-        zip -r app-release.ipa Payload
+          flutter build ios --release --no-codesign -v 2>&1 | tee flutter_ios_build.log
+          BUILD_STATUS=${PIPESTATUS[0]}
 
-    - name: Upload IPA Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: ios-app-release
-        path: build/ios/iphoneos/app-release.ipa
+          echo ""
+          echo "==================== ERRORS ONLY ===================="
+          grep -nEi "error:|Swift Compiler Error|Semantic Issue|Lexical or Preprocessor Issue|Command PhaseScriptExecution failed|No such module|Undefined symbols|ld:|Failed to build iOS app" flutter_ios_build.log | tail -200 || true
+          echo "====================================================="
+          echo ""
+
+          exit $BUILD_STATUS
+
+      - name: Upload iOS build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-ios-build-log
+          path: flutter_ios_build.log
+
+      - name: Create unsigned IPA
+        run: |
+          rm -rf build/ios/ipa
+          mkdir -p build/ios/ipa/Payload
+          cp -R build/ios/iphoneos/Runner.app build/ios/ipa/Payload/Runner.app
+          cd build/ios/ipa
+          zip -r app-release-unsigned.ipa Payload
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app-release-unsigned
+          path: build/ios/ipa/app-release-unsigned.ipa
