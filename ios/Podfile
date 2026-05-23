@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿platform :ios, '15.5'
+=======
+platform :ios, '15.5'
+>>>>>>> 5d7f62c (Set iOS deployment target to 15.5)
 
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
@@ -46,3 +50,4 @@ post_install do |installer|
     end
   end
 end
+
