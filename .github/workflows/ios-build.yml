@@ -26,8 +26,25 @@ jobs:
     - name: Install dependencies
       run: flutter pub get
 
-    - name: Build iOS App (No Sign)
-      run: flutter build ios --release --no-codesign -v 
+    - name: Install iOS pods with debug
+      run: |
+          set -e
+          echo "=== Podfile ==="
+          cat ios/Podfile
+
+          echo "=== Check conflict markers ==="
+          grep -n "<<<<<<<\|=======\|>>>>>>>" ios/Podfile && exit 1 || true
+
+          echo "=== pubspec packages ==="
+          grep -n "mobile_scanner\|google_mlkit_text_recognition\|google_mlkit_commons" pubspec.yaml || true
+
+          cd ios
+          rm -rf Pods Podfile.lock
+          pod install --repo-update --verbose
+          cd ..
+
+    - name: Build iOS App No Sign
+      run: flutter build ios --release --no-codesign -v
 
     - name: Create IPA Directory
       run: |
