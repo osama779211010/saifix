@@ -696,7 +696,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final bgImage = isDark ? "back 1 .png" : "back2.png";
+    final bgImage = isDark ? "back1.png" : "back2.png";
     final overlayColor =
         isDark
             ? AppColors.primaryBlue.withValues(alpha: 0.85)

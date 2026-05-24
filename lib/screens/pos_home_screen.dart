@@ -400,7 +400,7 @@ class _POSHomeScreenState extends State<POSHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final bool isDark = themeService.isDarkModeActive(context);
-    final bgImage = isDark ? "back 1 .png" : "back2.png";
+    final bgImage = isDark ? "back1.png" : "back2.png";
     final overlayColor =
         isDark
             ? AppColors.primaryBlue.withValues(alpha: 0.85)

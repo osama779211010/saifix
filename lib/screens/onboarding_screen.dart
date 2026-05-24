@@ -21,7 +21,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       title: 'onb_title_1'.tr(),
       description: 'onb_desc_1'.tr(),
       image: 'logo_circle.png',
-      backgroundImage: 'back 1 .png',
+      backgroundImage: 'back1.png',
     ),
     OnboardingData(
       title: 'onb_title_2'.tr(),
@@ -33,7 +33,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       title: 'onb_title_3'.tr(),
       description: 'onb_desc_3'.tr(),
       image: 'logo_circle.png',
-      backgroundImage: 'back 1 .png',
+      backgroundImage: 'back1.png',
     ),
     OnboardingData(
       title: 'onb_title_4'.tr(),
